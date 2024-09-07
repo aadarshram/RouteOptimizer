@@ -18,7 +18,19 @@ The project uses Google's [OR-Tools](https://developers.google.com/optimization/
 - **Round-trip and One-way Journeys**: Choose whether you want to optimize a round-trip or a one-way journey.
 - **Integration with Google Maps**: The extension extracts route details from Google Maps and reloads the optimized route directly in the browser.
 - **Backend Powered by FastAPI**: The optimization logic runs on a FastAPI backend that handles requests from the Chrome extension.
-- **Geocoding API**: Addresses are converted to latitude and longitude coordinates using a geocoding API.
+- **Geocoding API**: Addresses are converted to latitude and longitude coordinates using [Nominatim's Geocoding API](https://nominatim.org/release-docs/develop/api/Search/).
+- **OSRM API**: The actual distances between locations are fetched using [Project OSRM's Table Service](https://project-osrm.org/docs/v5.24.0/api/#route-service)
+
+## Example
+Consider the below example where the desired locations to be visited are, in general, San Fransisco, San Jose, Sunnyvale, New York and Texas. You input the order shown (San Fransisco -> Texas -> Sunnyvale -> New York -> San Jose -> San Fransisco) and the map shows your route. Clearly, it is not optimal.
+![Example search](./images/before.png)
+To get the optimal order, you open the RouteOptimizer extension and answer 'Yes' for the 'Is this a round trip?' question, since we start and end at San Fransisco. Then clicking 'Find Optimal Route' button will send the input location data to the backend sever where an API for the optimizer model is present. It then opens another tab with the optimal order in map.
+![After Optimizing](./images/after.png)
+As it can be seen, the order is clearly better.
+
+**Note-**
+The APIs used in this project are from open-source services and are entirely free of charge, which facilitated development. However, please be aware that they may occasionally produce errors or return inaccurate results (for example, here, the addresses returned are not exactly same as the input addresses). If you encounter issues or require higher accuracy, consider using more reliable alternatives. You can modify the utils.py file as needed to accommodate these changes.
+
 
 ## Project Structure
 
@@ -27,7 +39,6 @@ RouteOptimizer/
 ├── backend/
 │   ├── main.py               # FastAPI app with route optimization logic
 │   ├── utils.py              # Helper functions and TSP solver
-│   ├── .env.example          # Example environment variables file
 │   ├── requirements.txt      # Python dependencies
 ├── RouteOptimizer_ChromeExt/  # Chrome extension files
 │   ├── manifest.json          # Extension metadata and permissions
@@ -35,7 +46,6 @@ RouteOptimizer/
 │   ├── popup.js               # JavaScript for popup interactions
 │   ├── background.js          # Background script for handling API requests
 │   └── icon.png               # Extension icon
-├── .gitignore                 # Ignoring sensitive and unnecessary files
 └── README.md                  # Project documentation
 ```
 
@@ -51,19 +61,7 @@ RouteOptimizer/
    pip install -r requirements.txt
    ```
 
-2. **Set Up Environment Variables**
-
-   - Create a `.env` file in the `backend/` directory with the following content:
-   
-     ```bash
-     API_KEY=your_actual_api_key_here
-     ```
-
-   - Replace `your_actual_api_key_here` with your geocoding API key. You can obtain an API key from [Geocode Maps](https://geocode.maps.co/). They offer a free tier with up to 5,000 requests/day, which is sufficient for testing and small-scale use. You can also try other alternatives as this (or atlleast its free tier) does not work well for some locations.
-
-   **Important**: Ensure that the `.env` file is listed in `.gitignore` to prevent accidentally committing sensitive information to version control.
-
-3. **Run the FastAPI Server**
+2. **Run the FastAPI Server**
 
    Start the FastAPI server:
 
@@ -72,6 +70,8 @@ RouteOptimizer/
    ```
 
    The backend will be available at `http://0.0.0.0:8000`. You can view the automatically generated API documentation at [http://0.0.0.0:8000/docs](http://0.0.0.0:8000/docs).
+
+   **Note-** If you do not wish to host the server from your system, consider opting for commercial cloud-based hosting services.
 
 ### Chrome Extension Setup
 
@@ -109,11 +109,6 @@ RouteOptimizer/
 4. **View Results**
 
    The extension will fetch the optimized route from the backend and open it in a new Google Maps tab with the reordered stops.
-
-## Security Considerations
-
-- **Environment Variables**: Store sensitive information like API keys in environment variables, and ensure they are not included in your codebase. The `.env` file should be listed in your `.gitignore`.
-- **CORS Settings**: The backend is configured to allow requests from Chrome extensions. For production, you should further restrict access to specific extensions for better security.
 
 ## Author
 
