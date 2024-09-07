@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Route Optimizer for Google Maps</title>
+  <style>
+    body {
+      width: 350px;
+      padding: 20px;
+      padding-bottom: 60px; /* Ensure there's enough space for the author credit */
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    button {
+      width: 60%;
+      padding: 15px;
+      font-size: 14px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 15px; /* Add some space above the button */
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .author-credit {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+    }
+
+    .radio-group {
+      margin-bottom: 15px;
+    }
+
+    .radio-group label {
+      margin-right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="font-size: 20px; margin-bottom: 15px;">Route Optimizer for Google Maps</h1>
+  
+  <div class="radio-group">
+    <p>Is this a round trip?</p>
+    <label>
+      <input type="radio" name="roundTrip" value="yes" checked />
+      Yes
+    </label>
+    <label>
+      <input type="radio" name="roundTrip" value="no" />
+      No
+    </label>
+  </div>
+
+  <button id="Optimize">Find Optimal Route</button>
+  
+  <p class="author-credit">Author: Aadarsh R</p>
+  <script src="popup.js"></script>
+</body>
+</html>

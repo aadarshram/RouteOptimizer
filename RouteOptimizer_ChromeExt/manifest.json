@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "Route Optimizer",
+    "version": "1.0",
+    "permissions": [
+      "tabs",
+      "activeTab"
+    ],
+    "host_permissions": ["http://0.0.0.0:8000/"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "icons": {
+    "1": "icon.png"
+    }
+  }
+  
